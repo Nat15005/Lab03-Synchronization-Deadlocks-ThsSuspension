@@ -10,8 +10,23 @@
 Control de hilos con wait/notify. Productor/consumidor.
 
 1. Revise el funcionamiento del programa y ejecútelo. Mientras esto ocurren, ejecute jVisualVM y revise el consumo de CPU del proceso correspondiente. A qué se debe este consumo?, cual es la clase responsable?
+
+   ![image](https://github.com/user-attachments/assets/12f3a084-a100-4677-9f8d-eee85208b514)
+
+   La clase responsable del consumo en este proceso es "Consumer". Esto debido a que su ejecución constante se encuentra dentro de un "while(true)", condición que nunca cambia en el momento de la ejecución. También, no hay una espera dentro del proceso, lo que implica que se ejecute todo el tiempo asi no tenga elementos en la lista.
+
 2. Haga los ajustes necesarios para que la solución use más eficientemente la CPU, teniendo en cuenta que -por ahora- la producción es lenta y el consumo es rápido. Verifique con JVisualVM que el consumo de CPU se reduzca.
-3. Haga que ahora el productor produzca muy rápido, y el consumidor consuma lento. Teniendo en cuenta que el productor conoce un límite de Stock (cuantos elementos debería tener, a lo sumo en la cola), haga que dicho límite se respete. Revise el API de la colección usada como cola para ver cómo garantizar que dicho límite no se supere. Verifique que, al poner un límite pequeño para el 'stock', no haya consumo alto de CPU ni errores.
+
+	Necesitamos que Consumer se ejecute solo cuando haya algún elemento en la lista, para esto pondremos a dormir los hilos de Consumer siempre que este vacía la lista, asi evitaremos el consumo innecesario de CPU y haremos el programa más eficiente. Producer avisará cuando haya algo en la lista y despetará los hilos de Consumer.
+
+	![image](https://github.com/user-attachments/assets/38fd66e9-25f2-4ad8-b061-d9d3cda2dec7)
+
+	
+
+4. Haga que ahora el productor produzca muy rápido, y el consumidor consuma lento. Teniendo en cuenta que el productor conoce un límite de Stock (cuantos elementos debería tener, a lo sumo en la cola), haga que dicho límite se respete. Revise el API de la colección usada como cola para ver cómo garantizar que dicho límite no se supere. Verifique que, al poner un límite pequeño para el 'stock', no haya consumo alto de CPU ni errores.
+   
+	![image](https://github.com/user-attachments/assets/12503417-c1e1-458b-980f-c576e28babb6)
+
 
 
 ##### Parte II. – Antes de terminar la clase.
