@@ -29,6 +29,7 @@ public class Consumer extends Thread{
                         queue.wait();
                     }
                 }
+                
                 synchronized (queue) {
                     int elem = queue.poll();
                     System.out.println("Consumer consumes " + elem);
