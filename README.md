@@ -45,9 +45,9 @@ Teniendo en cuenta los conceptos vistos de condición de carrera y sincronizaci�
 
 	![image](https://github.com/user-attachments/assets/d767c82a-6143-452b-aecf-c79d7f90ad64)
 
-	Finalmente para garantizar que no siga buscando, hacemos uso de la variable atómica.
+	Finalmente para garantizar que no siga buscando cuando ya llegó a las ocurrencias dadas, hacemos uso de una bandera atómica para detener la búsqueda globalmente. Prevenimos tener condiciones de carrera al hacer uso de operaciones atómicas y bloques de sincornización.
 
-	![image](https://github.com/user-attachments/assets/8495f6dd-5a14-4687-89df-4c6ba11bb7e4)
+	![image](https://github.com/user-attachments/assets/59c01eb7-1917-4567-becc-1a345fdde8f4)
 
 
 ##### Parte III. – Avance para el martes, antes de clase.
