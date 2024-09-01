@@ -36,6 +36,20 @@ Teniendo en cuenta los conceptos vistos de condición de carrera y sincronizaci�
 - La búsqueda distribuida se detenga (deje de buscar en las listas negras restantes) y retorne la respuesta apenas, en su conjunto, los hilos hayan detectado el número de ocurrencias requerido que determina si un host es confiable o no (_BLACK_LIST_ALARM_COUNT_).
 - Lo anterior, garantizando que no se den condiciones de carrera.
 
+	Vamos a implementar los conceptos vistos en clase. Para esto, identificaremos las zonas críticas y posibles zonas de mejora.
+
+	![image](https://github.com/user-attachments/assets/81c53277-d4a3-4ce9-9ed0-d4e0dd639cd2)
+
+	Los contadores ahora los tratamos como Atomic Integers, la zona crítica e indispensable de sincronizar es cuando encuentra la IP en un servidor, entonces agregamos el synchronized.
+	Evidenciamos la mejoría puesto que ahora el programa hace su ejecución más rápida y utiliza mejor los recursos del computador.
+
+	![image](https://github.com/user-attachments/assets/d767c82a-6143-452b-aecf-c79d7f90ad64)
+
+	Finalmente para garantizar que no siga buscando, hacemos uso de la variable atómica.
+
+	![image](https://github.com/user-attachments/assets/8495f6dd-5a14-4687-89df-4c6ba11bb7e4)
+
+
 ##### Parte III. – Avance para el martes, antes de clase.
 
 Sincronización y Dead-Locks.
