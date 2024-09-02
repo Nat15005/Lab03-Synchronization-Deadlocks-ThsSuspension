@@ -65,11 +65,36 @@ Sincronización y Dead-Locks.
 
 2. Revise el código e identifique cómo se implemento la funcionalidad antes indicada. Dada la intención del juego, un invariante debería ser que la sumatoria de los puntos de vida de todos los jugadores siempre sea el mismo(claro está, en un instante de tiempo en el que no esté en proceso una operación de incremento/reducción de tiempo). Para este caso, para N jugadores, cual debería ser este valor?.
 
+	```Como el valor de vida inicial de cada inmortal es H=100 y todos comienzan con la misma cantidad de vida, además de que no hay pérdida de vida (es constante el total de vida), el invariante sería N x H. Este es el valor que se debe mantener a lo largo del juego```
+
 3. Ejecute la aplicación y verifique cómo funcionan las opción ‘pause and check’. Se cumple el invariante?.
+
+	![image](https://github.com/user-attachments/assets/6373bd1b-ba67-4859-95ee-49ef531a0e22)
+	![image](https://github.com/user-attachments/assets/5729c6cc-91a1-4560-a120-4eca605f0eb0)
+	![image](https://github.com/user-attachments/assets/0fdd5d73-9888-4d50-b294-9413c1e6bd2c)
+
+	La invariante no se está cumpliendo, ya que el valor de vida total no está siendo constante
 
 4. Una primera hipótesis para que se presente la condición de carrera para dicha función (pause and check), es que el programa consulta la lista cuyos valores va a imprimir, a la vez que otros hilos modifican sus valores. Para corregir esto, haga lo que sea necesario para que efectivamente, antes de imprimir los resultados actuales, se pausen todos los demás hilos. Adicionalmente, implemente la opción ‘resume’.
 
+	- Primero definimos la bandera atomica y el monitor que utilizaremos para la sincronización
+	![image](https://github.com/user-attachments/assets/446ac64a-d179-4ebb-ac89-d1fe7cd47e10)
+
+	- Creamos los métodos necesarios para pausar y resumir el programa
+		- pauseImmortal(), pone paused en true.
+		- resumeImmortal(), pone paused en false y notifica a todos los hilos en espera
+  		- checkPaused() pone en pausa al hilo cuando detecta que la bandera paused está activada.
+
+		![image](https://github.com/user-attachments/assets/0a90fafd-1cb8-45d5-b56d-0020e3a976b0)
+		
+
 5. Verifique nuevamente el funcionamiento (haga clic muchas veces en el botón). Se cumple o no el invariante?.
+
+	- Al hacer click muchas veces en el botón vemos que el invariante sigue sin cumplirse.
+
+	![image](https://github.com/user-attachments/assets/0ba38249-e29d-445c-8019-a4c794f5b33f)
+	![image](https://github.com/user-attachments/assets/d3e6bf7a-c03c-4705-ae74-5a1391fc0950)
+	![image](https://github.com/user-attachments/assets/f457dc63-503a-4d01-bdaa-ac2c07409dee)
 
 6. Identifique posibles regiones críticas en lo que respecta a la pelea de los inmortales. Implemente una estrategia de bloqueo que evite las condiciones de carrera. Recuerde que si usted requiere usar dos o más ‘locks’ simultáneamente, puede usar bloques sincronizados anidados:
 
