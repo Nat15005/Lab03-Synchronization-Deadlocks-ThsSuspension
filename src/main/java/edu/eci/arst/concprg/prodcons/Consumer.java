@@ -29,17 +29,16 @@ public class Consumer extends Thread{
                         queue.wait();
                     }
                 }
-
                 synchronized (queue) {
                     int elem = queue.poll();
                     System.out.println("Consumer consumes " + elem);
+                    queue.notifyAll();
                 }
-                Thread.sleep(5000);
+                Thread.sleep(3000);
                 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
-
 }
