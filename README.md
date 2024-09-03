@@ -106,9 +106,21 @@ Sincronización y Dead-Locks.
 	}
 	```
 
+	![image](https://github.com/user-attachments/assets/12bbfe85-95f0-4b69-8509-2ad73ea7ff51)
+	![image](https://github.com/user-attachments/assets/0579cd68-aef4-4b52-ac3b-5f8089bb202a)
+
+
 7. Tras implementar su estrategia, ponga a correr su programa, y ponga atención a si éste se llega a detener. Si es así, use los programas jps y jstack para identificar por qué el programa se detuvo.
 
+	![image](https://github.com/user-attachments/assets/db18547c-0cb9-4278-b470-190c60d81f22)
+	![image](https://github.com/user-attachments/assets/4aea6d92-b48e-41fd-86f5-c584c0ba7728)
+	![image](https://github.com/user-attachments/assets/67b0b9dc-8f3f-4a84-b90d-49210f97186d)
+
+
 8. Plantee una estrategia para corregir el problema antes identificado (puede revisar de nuevo las páginas 206 y 207 de _Java Concurrency in Practice_).
+
+	![image](https://github.com/user-attachments/assets/562298fa-0da2-437c-8723-5eda2b698e46)
+
 
 9. Una vez corregido el problema, rectifique que el programa siga funcionando de manera consistente cuando se ejecutan 100, 1000 o 10000 inmortales. Si en estos casos grandes se empieza a incumplir de nuevo el invariante, debe analizar lo realizado en el paso 4.
 
