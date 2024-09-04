@@ -87,6 +87,9 @@ Sincronización y Dead-Locks.
 
 		![image](https://github.com/user-attachments/assets/b82f9406-5780-4c49-b768-feb06eafd6eb)
 
+	- Actualizamos los botones en ControlFrame
+		![image](https://github.com/user-attachments/assets/87c114ce-5f87-4032-8472-2a4faf249bf6)
+
 
 5. Verifique nuevamente el funcionamiento (haga clic muchas veces en el botón). Se cumple o no el invariante?.
 
