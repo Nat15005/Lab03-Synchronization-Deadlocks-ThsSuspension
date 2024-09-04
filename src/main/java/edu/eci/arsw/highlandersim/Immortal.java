@@ -2,15 +2,14 @@ package edu.eci.arsw.highlandersim;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Immortal extends Thread {
 
     private ImmortalUpdateReportCallback updateCallback=null;
-    
+
     private int health;
-    
+
     private int defaultDamageValue;
 
     private final List<Immortal> immortalsPopulation;
@@ -19,11 +18,9 @@ public class Immortal extends Thread {
 
     private final Random r = new Random(System.currentTimeMillis());
     //bandera
-    private AtomicBoolean paused = new AtomicBoolean(false);
+    private static boolean paused = false;
     // Monitor para la sincronización
-    private final Object pauseLock = new Object();
-    // Monitor para la sincronización de peleas
-    private final Object fightLock = new Object();
+    private static final Object pauseLock = new Object();
 
 
     public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb) {
@@ -35,73 +32,66 @@ public class Immortal extends Thread {
         this.defaultDamageValue=defaultDamageValue;
     }
 
-    public void pauseImmortal() {
-        paused.set(true);
+    public static void pauseImmortal() {
+        paused = true;
     }
 
-    public void resumeImmortal() {
+    public static void resumeImmortal() {
         synchronized (pauseLock) {
-            paused.set(false);
+            paused = false;
             pauseLock.notifyAll();
         }
     }
     private void checkPaused() {
-            while (paused.get()) {
-                try {
-                    synchronized (pauseLock) {
-                        pauseLock.wait();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-    }
-
-    public void run() {
-        while (true) {
-            checkPaused();
-
-            Immortal im;
-            int myIndex;
-            int nextFighterIndex;
-
-            // Bloqueo para acceder a la lista de inmortales
-            synchronized (immortalsPopulation) {
-                myIndex = immortalsPopulation.indexOf(this);
-                nextFighterIndex = r.nextInt(immortalsPopulation.size());
-
-                // Evitar pelea consigo mismo
-                if (nextFighterIndex == myIndex) {
-                    nextFighterIndex = (nextFighterIndex + 1) % immortalsPopulation.size();
-                }
-
-                im = immortalsPopulation.get(nextFighterIndex);
-            }
-
-            fight(im);
-
+        while (paused) {
             try {
-                Thread.sleep(1);
+                synchronized (pauseLock) {
+                    pauseLock.wait();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void fight(Immortal i2) {
-        Immortal first, second;
+    public void run() {
 
-        // Determina el orden de los inmortales para evitar deadlock
-        if (this.name.compareTo(i2.name) < 0) {
-            first = this;
-            second = i2;
-        } else {
-            first = i2;
-            second = this;
+        while (true) {
+            checkPaused();
+            Immortal im;
+
+            int myIndex = immortalsPopulation.indexOf(this);
+            int nextFighterIndex = r.nextInt(immortalsPopulation.size());
+
+            //avoid self-fight
+            if (nextFighterIndex == myIndex) {
+                nextFighterIndex = ((nextFighterIndex + 1) % immortalsPopulation.size());
+            }
+
+            im = immortalsPopulation.get(nextFighterIndex);
+
+            this.fight(im);
+
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
-        // Bloquea los inmortales en orden
-        synchronized (first.fightLock) {
-            synchronized (second.fightLock) {
+
+    }
+
+    public void fight(Immortal i2) {
+        Immortal i1 = this;
+
+        // Orden de bloqueo basado en el hashCode
+        Immortal firstLock = (i1.hashCode() < i2.hashCode()) ? i1 : i2;
+        Immortal secondLock = (i1.hashCode() < i2.hashCode()) ? i2 : i1;
+
+        // Bloqueamos en orden
+        synchronized (firstLock) {
+            synchronized (secondLock) {
                 if (i2.getHealth() > 0) {
                     i2.changeHealth(i2.getHealth() - defaultDamageValue);
                     this.health += defaultDamageValue;
@@ -115,15 +105,11 @@ public class Immortal extends Thread {
 
 
     public void changeHealth(int v) {
-        synchronized (fightLock) {
-            health = v;
-        }
+        health = v;
     }
 
     public int getHealth() {
-        synchronized (fightLock) {
-            return health;
-        }
+        return health;
     }
 
     @Override
