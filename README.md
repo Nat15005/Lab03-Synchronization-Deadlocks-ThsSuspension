@@ -77,16 +77,16 @@ Sincronización y Dead-Locks.
 
 4. Una primera hipótesis para que se presente la condición de carrera para dicha función (pause and check), es que el programa consulta la lista cuyos valores va a imprimir, a la vez que otros hilos modifican sus valores. Para corregir esto, haga lo que sea necesario para que efectivamente, antes de imprimir los resultados actuales, se pausen todos los demás hilos. Adicionalmente, implemente la opción ‘resume’.
 
-	- Primero definimos la bandera atomica y el monitor que utilizaremos para la sincronización
-	![image](https://github.com/user-attachments/assets/446ac64a-d179-4ebb-ac89-d1fe7cd47e10)
+	- Primero definimos una banderaa y el monitor que utilizaremos para la sincronización
+	![image](https://github.com/user-attachments/assets/09d1f149-7f1a-480d-b728-26a09f580c55)
 
 	- Creamos los métodos necesarios para pausar y resumir el programa
 		- pauseImmortal(), pone paused en true.
 		- resumeImmortal(), pone paused en false y notifica a todos los hilos en espera
   		- checkPaused() pone en pausa al hilo cuando detecta que la bandera paused está activada.
 
-		![image](https://github.com/user-attachments/assets/0a90fafd-1cb8-45d5-b56d-0020e3a976b0)
-		
+		![image](https://github.com/user-attachments/assets/b82f9406-5780-4c49-b768-feb06eafd6eb)
+
 
 5. Verifique nuevamente el funcionamiento (haga clic muchas veces en el botón). Se cumple o no el invariante?.
 
@@ -106,7 +106,7 @@ Sincronización y Dead-Locks.
 	}
 	```
 
-	![image](https://github.com/user-attachments/assets/12bbfe85-95f0-4b69-8509-2ad73ea7ff51)
+	![image](https://github.com/user-attachments/assets/2e71d38a-1254-4493-890b-32f1cb72596f)
 	![image](https://github.com/user-attachments/assets/0579cd68-aef4-4b52-ac3b-5f8089bb202a)
 
 
@@ -119,8 +119,7 @@ Sincronización y Dead-Locks.
 
 8. Plantee una estrategia para corregir el problema antes identificado (puede revisar de nuevo las páginas 206 y 207 de _Java Concurrency in Practice_).
 
-	![image](https://github.com/user-attachments/assets/562298fa-0da2-437c-8723-5eda2b698e46)
-
+	![image](https://github.com/user-attachments/assets/5627de1a-0e59-4b65-833b-e8c6650b2a0b)
 
 9. Una vez corregido el problema, rectifique que el programa siga funcionando de manera consistente cuando se ejecutan 100, 1000 o 10000 inmortales. Si en estos casos grandes se empieza a incumplir de nuevo el invariante, debe analizar lo realizado en el paso 4.
 
