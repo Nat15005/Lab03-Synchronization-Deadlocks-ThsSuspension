@@ -3,6 +3,7 @@ package edu.eci.arsw.highlandersim;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Immortal extends Thread {
 
@@ -59,9 +60,13 @@ public class Immortal extends Thread {
         while (true) {
             checkPaused();
             Immortal im;
+            int myIndex;
+            int nextFighterIndex;
 
-            int myIndex = immortalsPopulation.indexOf(this);
-            int nextFighterIndex = r.nextInt(immortalsPopulation.size());
+            // Bloqueo para acceder a la lista de inmortales
+            synchronized (immortalsPopulation) {
+                myIndex = immortalsPopulation.indexOf(this);
+                nextFighterIndex = r.nextInt(immortalsPopulation.size());
 
             //avoid self-fight
             if (nextFighterIndex == myIndex) {
@@ -69,8 +74,8 @@ public class Immortal extends Thread {
             }
 
             im = immortalsPopulation.get(nextFighterIndex);
-
-            this.fight(im);
+            }
+            fight(im);
 
             try {
                 Thread.sleep(1);

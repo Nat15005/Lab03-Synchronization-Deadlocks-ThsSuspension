@@ -90,14 +90,17 @@ public class ControlFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 Immortal.pauseImmortal();
+                try {
+                    Thread.sleep(100); // Asegurar que todos los hilos han procesado la pausa
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 int sum = 0;
                 for (Immortal im : immortals) {
                     sum += im.getHealth();
                 }
 
                 statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
-
-
 
             }
         });
