@@ -1,0 +1,6 @@
+Cuando se eliminan elementos de una colección que está siendo iterada o modificada por múltiples hilos, pueden surgir las siguientes condiciones de carrera:
+
+- Acceso Concurrente: Si un inmortal está siendo eliminado mientras otros inmortales están intentando acceder a él, podrías tener problemas de consistencia, como intentar acceder a un inmortal que ya no existe.
+
+- Modificación de la Lista: La modificación de la lista de inmortales (por ejemplo, eliminando inmortales muertos) mientras otros hilos iteran sobre ella puede llevar a excepciones de concurrencia o resultados incorrectos.
+

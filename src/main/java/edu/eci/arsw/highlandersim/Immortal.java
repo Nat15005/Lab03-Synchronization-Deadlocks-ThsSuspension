@@ -1,34 +1,31 @@
 package edu.eci.arsw.highlandersim;
 
-import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Immortal extends Thread {
 
-    private ImmortalUpdateReportCallback updateCallback=null;
+    private ImmortalUpdateReportCallback updateCallback = null;
 
     private int health;
-
     private int defaultDamageValue;
-
-    private final List<Immortal> immortalsPopulation;
-
+    private final CopyOnWriteArrayList<Immortal> immortalsPopulation;
     private final String name;
-
     private final Random r = new Random(System.currentTimeMillis());
-    //bandera
-    private static boolean paused = false;
+    private volatile boolean isStillAlive = true; // Atributo para el estado de vida
+
+    // Bandera
+    private static volatile boolean paused = false;
     private static final Object pauseLock = new Object();
+    private static boolean stopped = false;
 
-
-    public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb) {
+    public Immortal(String name, CopyOnWriteArrayList<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb) {
         super(name);
-        this.updateCallback=ucb;
+        this.updateCallback = ucb;
         this.name = name;
         this.immortalsPopulation = immortalsPopulation;
         this.health = health;
-        this.defaultDamageValue=defaultDamageValue;
+        this.defaultDamageValue = defaultDamageValue;
     }
 
     public static void pauseImmortal() {
@@ -41,8 +38,9 @@ public class Immortal extends Thread {
             pauseLock.notifyAll();
         }
     }
+
     private void checkPaused() {
-        while (paused) {
+        while (paused && !stopped) {
             try {
                 synchronized (pauseLock) {
                     pauseLock.wait();
@@ -53,10 +51,23 @@ public class Immortal extends Thread {
         }
     }
 
-    public void run() {
+    public static void stopImmortal() {
+        synchronized (pauseLock) {
+            stopped = true;
+            pauseLock.notifyAll(); // Despertar hilos en espera
+        }
+    }
+    public static void resetState() {
+        synchronized (pauseLock) {
+            paused = false;
+            stopped = false;
+        }
+    }
 
-        while (true) {
+    public void run() {
+        while (isStillAlive && !stopped) { // El inmortal solo pelea si está vivo
             checkPaused();
+            if (stopped) break;
             Immortal im;
             int myIndex;
             int nextFighterIndex;
@@ -64,14 +75,12 @@ public class Immortal extends Thread {
             // Bloqueo para acceder a la lista de inmortales
             synchronized (immortalsPopulation) {
                 myIndex = immortalsPopulation.indexOf(this);
-                nextFighterIndex = r.nextInt(immortalsPopulation.size());
+                do {
+                    nextFighterIndex = r.nextInt(immortalsPopulation.size());
+                } while (nextFighterIndex == myIndex || !immortalsPopulation.get(nextFighterIndex).isStillAlive);
+                // Asegurarse de no pelear contra uno mismo o un inmortal muerto
 
-            //avoid self-fight
-            if (nextFighterIndex == myIndex) {
-                nextFighterIndex = ((nextFighterIndex + 1) % immortalsPopulation.size());
-            }
-
-            im = immortalsPopulation.get(nextFighterIndex);
+                im = immortalsPopulation.get(nextFighterIndex);
             }
             fight(im);
 
@@ -80,9 +89,7 @@ public class Immortal extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
     public void fight(Immortal i2) {
@@ -100,25 +107,41 @@ public class Immortal extends Thread {
                     this.health += defaultDamageValue;
                     updateCallback.processReport("Fight: " + this + " vs " + i2 + "\n");
                 } else {
+                    // Eliminar el inmortal muerto de la lista de inmortales
+                    synchronized (immortalsPopulation) {
+                        if (i2.isStillAlive) {
+                            i2.markAsDead(); // Marcar el inmortal como muerto
+                            immortalsPopulation.remove(i2); // Eliminar el inmortal de la lista
+                        }
+                    }
                     updateCallback.processReport(this + " says: " + i2 + " is already dead!\n");
                 }
             }
         }
     }
 
+    // Método para marcar un inmortal como muerto
+    public void markAsDead() {
+        this.isStillAlive = false;
+    }
 
     public void changeHealth(int v) {
         health = v;
+        if (health <= 0) {
+            markAsDead(); // Si la salud es 0 o menos, marcar como muerto
+        }
     }
 
     public int getHealth() {
         return health;
     }
 
-    @Override
-    public String toString() {
-
-        return name + "[" + health + "]";
+    public boolean isStillAlive() {
+        return isStillAlive;
     }
 
+    @Override
+    public String toString() {
+        return name + "[" + health + "]";
+    }
 }
