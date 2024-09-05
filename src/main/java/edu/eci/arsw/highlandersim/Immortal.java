@@ -3,7 +3,6 @@ package edu.eci.arsw.highlandersim;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Immortal extends Thread {
 
@@ -20,7 +19,6 @@ public class Immortal extends Thread {
     private final Random r = new Random(System.currentTimeMillis());
     //bandera
     private static boolean paused = false;
-    // Monitor para la sincronización
     private static final Object pauseLock = new Object();
 
 
