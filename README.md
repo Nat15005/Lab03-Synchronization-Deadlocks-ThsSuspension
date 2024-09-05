@@ -134,13 +134,12 @@ Sincronización y Dead-Locks.
 	* Analizando el esquema de funcionamiento de la simulación, esto podría crear una condición de carrera? Implemente la funcionalidad, ejecute la simulación y observe qué problema se presenta cuando hay muchos 'inmortales' en la misma. Escriba sus conclusiones al respecto en el archivo RESPUESTAS.txt.
 	* Corrija el problema anterior __SIN hacer uso de sincronización__, pues volver secuencial el acceso a la lista compartida de inmortales haría extremadamente lenta la simulación.
 
-	![image](https://github.com/user-attachments/assets/8c112b94-0a34-4699-9cec-64c98eea651d)
-
+	![image](https://github.com/user-attachments/assets/d8479614-8b5b-49eb-bd93-9fc69d424535)
 
 11. Para finalizar, implemente la opción STOP.
  
-	![image](https://github.com/user-attachments/assets/44cee877-46e5-4d5c-8453-fd4339817392)
-    
+	![image](https://github.com/user-attachments/assets/d222d7ff-c3ee-4b36-a9c6-d1eb3f8bb474)
+
     Implementamos la funcionalidad del botón STOP. Añadimos lo siguiente: cuando se da click en Stop, se activa el botón Start, permitiendo cambiar el número de peleadores e iniciando una nueva pelea.
 
 
