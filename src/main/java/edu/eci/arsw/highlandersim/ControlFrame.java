@@ -98,11 +98,14 @@ public class ControlFrame extends JFrame {
                 }
 
                 int sum = 0;
-                for (Immortal im : immortals) {
-                    sum += im.getHealth();
+                synchronized (immortals){
+                    for (Immortal im : immortals) {
+                        sum += im.getHealth();
+                    }
                 }
-
                 statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
+
+
 
 
 
