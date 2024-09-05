@@ -110,7 +110,6 @@ Sincronización y Dead-Locks.
 	```
 
 	![image](https://github.com/user-attachments/assets/2e71d38a-1254-4493-890b-32f1cb72596f)
-	![image](https://github.com/user-attachments/assets/0579cd68-aef4-4b52-ac3b-5f8089bb202a)
 
 
 7. Tras implementar su estrategia, ponga a correr su programa, y ponga atención a si éste se llega a detener. Si es así, use los programas jps y jstack para identificar por qué el programa se detuvo.
