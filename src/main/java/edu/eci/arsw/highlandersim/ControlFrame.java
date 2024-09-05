@@ -20,7 +20,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.JScrollBar;
 
@@ -73,6 +72,10 @@ public class ControlFrame extends JFrame {
         JButton btnResume = new JButton("Resume");
         JButton btnStop = new JButton("STOP");
 
+        btnPauseAndCheck.setEnabled(false);
+        btnResume.setEnabled(false);
+        btnStop.setEnabled(false);
+
         btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 output.setText("");
@@ -90,6 +93,7 @@ public class ControlFrame extends JFrame {
                 btnStart.setEnabled(false);
                 btnPauseAndCheck.setEnabled(true);
                 btnResume.setEnabled(true);
+                btnStop.setEnabled(true);
             }
         });
         toolBar.add(btnStart);
@@ -138,6 +142,7 @@ public class ControlFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Immortal.stopImmortal();
                 output.setText("");
+                statisticsLabel.setText("Immortals total health:");
 
                 btnStart.setEnabled(true);
                 btnResume.setEnabled(false);
