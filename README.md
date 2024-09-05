@@ -135,6 +135,9 @@ Sincronización y Dead-Locks.
 	* Corrija el problema anterior __SIN hacer uso de sincronización__, pues volver secuencial el acceso a la lista compartida de inmortales haría extremadamente lenta la simulación.
 
 11. Para finalizar, implemente la opción STOP.
+    	![image](https://github.com/user-attachments/assets/3caf33ed-497c-4202-b36c-2ecf9411ebfa)
+    Implementamos la funcionalidad del botón STOP. Añadimos lo siguiente: cuando se da click en Stop, se activa el botón Start, permitiendo cambiar el número de peleadores e iniciando una nueva pelea.
+
 
 <!--
 ### Criterios de evaluación
