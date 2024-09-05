@@ -125,6 +125,10 @@ Sincronización y Dead-Locks.
 	![image](https://github.com/user-attachments/assets/5627de1a-0e59-4b65-833b-e8c6650b2a0b)
 
 9. Una vez corregido el problema, rectifique que el programa siga funcionando de manera consistente cuando se ejecutan 100, 1000 o 10000 inmortales. Si en estos casos grandes se empieza a incumplir de nuevo el invariante, debe analizar lo realizado en el paso 4.
+   
+	Debido a que el invariante está cambiando cada vez que se para y reanuda el programa, evidenciamos que se está presentando condición de carrera. Para arreglar esto, añadimos un bloque synchronized en la región critica del botón.
+
+	![image](https://github.com/user-attachments/assets/72452021-e4e8-4dda-9a82-530358f5c5fb)
 
 10. Un elemento molesto para la simulación es que en cierto punto de la misma hay pocos 'inmortales' vivos realizando peleas fallidas con 'inmortales' ya muertos. Es necesario ir suprimiendo los inmortales muertos de la simulación a medida que van muriendo. Para esto:
 	* Analizando el esquema de funcionamiento de la simulación, esto podría crear una condición de carrera? Implemente la funcionalidad, ejecute la simulación y observe qué problema se presenta cuando hay muchos 'inmortales' en la misma. Escriba sus conclusiones al respecto en el archivo RESPUESTAS.txt.
